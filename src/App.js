@@ -1,3 +1,4 @@
+import react from "react";
 import React from "react";
 
 import image0 from "./assets/forca0.png"
@@ -20,22 +21,22 @@ export default function App() {
 
     const [imagemForca, setImagemForca] = React.useState(image0)
 
-    const [palavraSorteada, setPalavraSorteada] = React.useState()
-
     const gamesWord = [...palavras]
+
+    const [sortWord, setSortWord] = react.useState()
 
     const [botaoChooseWord, setBotaoChooseWord] = React.useState(<div className="choose-word" onClick={EscolherPalavra}>Escolher palavra</div>)
 
     gamesWord.sort(() => Math.random() - 0.5)
 
+    const [arr, setArr] = React.useState([])
 
-    function EscolherPalavra(){
-        setPalavraSorteada(gamesWord[0])
+
+    function EscolherPalavra() {
         setBotaoChooseWord(<div className="choose-word gray">Escolher palavra</div>)
+        setSortWord(gamesWord[0])
+        setArr(gamesWord[0].split(''))
     }
-
-
-
 
 
 
@@ -53,7 +54,7 @@ export default function App() {
 
                     {botaoChooseWord}
 
-                    <div className="palavraAleatória">{palavraSorteada}</div>
+                    <div className="palavraAleatória">{arr.map((c) => ("_ "))}</div>
 
                 </div>
             </div>
@@ -85,7 +86,8 @@ export default function App() {
                 </div>
 
                 <div className="kick">
-                    <input placeholder="Já sei, a palavra é:"></input>
+                    {/* "Já sei, a palavra é:" */}
+                    <input placeholder={sortWord}></input>
                     <div className="kick-word">Chutar</div>
                 </div>
 
