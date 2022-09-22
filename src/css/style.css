@@ -35,6 +35,18 @@ img {
     margin-top: 100px;
 }
 
+.right-side{
+    display: flex;
+    flex-direction: column;
+}
+
+.palavraAleatória{
+    margin-top: 100px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+}
+
+
 .bottom-part{
     margin-top: 50px;
     flex-direction: column;
@@ -91,4 +103,8 @@ input, .kick-word{
 
 .choose-word, .testekey, .kick-word{
     cursor: pointer;
+}
+
+.gray{
+    background-color: gray;
 }
