@@ -11,13 +11,15 @@ import image6 from "./assets/forca6.png"
 
 import palavras from "./palavras";
 
-const alfabeto = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
-
-
 
 
 
 export default function App() {
+
+
+    const alfabeto = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
+
+    const [clicados, setClicados] = React.useState([])
 
     const [imagemForca, setImagemForca] = React.useState(image0)
 
@@ -31,12 +33,42 @@ export default function App() {
 
     const [arr, setArr] = React.useState([])
 
+    const [hiddenWord, setHiddenWord] = react.useState([])
+
+
 
     function EscolherPalavra() {
         setBotaoChooseWord(<div className="choose-word gray">Escolher palavra</div>)
         setSortWord(gamesWord[0])
         setArr(gamesWord[0].split(''))
+
+
+        const letrass = []
+        for (let i = 0; i < gamesWord[0].length; i++) {
+            letrass.push("_ ")
+        }
+        setHiddenWord(letrass)
     }
+
+
+
+
+
+
+    function verificarLetra(c, i) {
+
+        //vai trabalhar com a hiddenWord, sortWord
+        // alert(sortWord)
+        // const array = [...hiddenWord]
+        // array[2] = `${c} `
+        // setHiddenWord(array)
+        // alert(array)
+        setClicados([...clicados, i])
+    }
+
+
+
+
 
 
 
@@ -54,7 +86,10 @@ export default function App() {
 
                     {botaoChooseWord}
 
-                    <div className="palavraAleatória">{arr.map((c) => ("_ "))}</div>
+                    <div className="palavraAleatória">{
+                        // arr.map((c) => ("_ "))
+                        hiddenWord
+                    }</div>
 
                 </div>
             </div>
@@ -64,31 +99,24 @@ export default function App() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div className="bottom-part">
 
                 <div className="keyboard">
-                    {alfabeto.map((l) => <div className="testekey">{l}</div>)}
+                    {alfabeto.map((l, i) =>
+                    //<div className="testekey" onClick={() =>{ verificarLetra(l, i) }}>{l}</div>
+                    {
+                        if (clicados.includes(i)) {
+                            return (<div className="testekey clicada" onClick={() => alert("essa letra já foi clicada")}>{l}</div>)
+                        } else {
+                            return (<div className="testekey" onClick={() => { verificarLetra(l, i) }}>{l}</div>)
+                        }
+                    })}
                 </div>
 
                 <div className="kick">
                     {/* "Já sei, a palavra é:" */}
                     <input placeholder={sortWord}></input>
-                    <div className="kick-word">Chutar</div>
+                    <div className="kick-word" onClick={() => (alert('oi'))}>Chutar</div>
                 </div>
 
             </div>

@@ -108,3 +108,10 @@ input, .kick-word{
 .gray{
     background-color: gray;
 }
+
+.clicada{
+    /* background-color: rgb(58, 58, 58); */
+    background-color: gray;
+    color: #FFF;
+    
+}
