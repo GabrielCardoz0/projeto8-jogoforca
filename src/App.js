@@ -38,6 +38,7 @@ export default function App() {
 
 
     function EscolherPalavra() {
+
         setBotaoChooseWord(<div className="choose-word gray">Escolher palavra</div>)
         setSortWord(gamesWord[0])
         setArr(gamesWord[0].split(''))
@@ -45,9 +46,11 @@ export default function App() {
 
         const letrass = []
         for (let i = 0; i < gamesWord[0].length; i++) {
-            letrass.push("_ ")
+            letrass.push(" _ ")
         }
         setHiddenWord(letrass)
+
+        setTralala(false)
     }
 
 
@@ -55,15 +58,32 @@ export default function App() {
 
 
 
-    function verificarLetra(c, i) {
+    function verificarLetra(char, ind) {
+        setClicados([...clicados, ind])
 
-        //vai trabalhar com a hiddenWord, sortWord
-        // alert(sortWord)
-        // const array = [...hiddenWord]
-        // array[2] = `${c} `
-        // setHiddenWord(array)
-        // alert(array)
-        setClicados([...clicados, i])
+        const str = sortWord
+        const semAcento = str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+        const array = semAcento.toUpperCase().split('')
+
+        array.map((caracterSemAcento, indiceSemAcento) => verificarCaractere(caracterSemAcento, indiceSemAcento, char))
+    }
+
+
+    const arraySemNome = [...hiddenWord]
+
+
+
+
+    function verificarCaractere(c, i, l) {
+        let contador = 0
+        if (l === c) {
+            arraySemNome[i] = sortWord[i]
+            setHiddenWord(arraySemNome)
+            contador = 1
+        } 
+        if (contador = 0){
+            alert('letra errada')
+        }
     }
 
 
@@ -72,14 +92,35 @@ export default function App() {
 
 
 
+    const [tralala, setTralala] = React.useState(true)
 
+
+    function KeyboardON() {
+        return (
+            <div className="keyboard">
+                {alfabeto.map((l, i) => {
+                    if (tralala == true) {
+                        return (
+                            <div className="testekey clicada">{l}</div>
+                        )
+                    } else {
+                        if (clicados.includes(i)) {
+                            return (<div className="testekey clicada" onClick={() => alert("essa letra já foi clicada")}>{l}</div>)
+                        } else {
+                            return (<div className="testekey" onClick={() => { verificarLetra(l, i) }}>{l}</div>)
+                        }
+                    }
+                })}
+            </div>
+        )
+    }
 
 
 
     return (
         <>
             <div className="top-part">
-                <img src={imagemForca} alt="" />
+                <img src={imagemForca} alt="" onClick={() => setTralala(false)} />
 
 
                 <div className="right-side">
@@ -95,23 +136,8 @@ export default function App() {
             </div>
 
 
-
-
-
-
             <div className="bottom-part">
-
-                <div className="keyboard">
-                    {alfabeto.map((l, i) =>
-                    //<div className="testekey" onClick={() =>{ verificarLetra(l, i) }}>{l}</div>
-                    {
-                        if (clicados.includes(i)) {
-                            return (<div className="testekey clicada" onClick={() => alert("essa letra já foi clicada")}>{l}</div>)
-                        } else {
-                            return (<div className="testekey" onClick={() => { verificarLetra(l, i) }}>{l}</div>)
-                        }
-                    })}
-                </div>
+                <KeyboardON />
 
                 <div className="kick">
                     {/* "Já sei, a palavra é:" */}
