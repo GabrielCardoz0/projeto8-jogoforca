@@ -117,3 +117,15 @@ input, .kick-word{
     color: #FFF;
     
 }
+
+.normal{
+    color: #000;
+}
+
+.errou{
+    color: red;
+}
+
+.acertou{
+    color: green;
+}

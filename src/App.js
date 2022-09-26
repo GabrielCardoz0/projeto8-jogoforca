@@ -11,9 +11,6 @@ import image6 from "./assets/forca6.png"
 
 import palavras from "./palavras";
 
-
-
-
 export default function App() {
 
 
@@ -21,12 +18,11 @@ export default function App() {
 
     const [clicados, setClicados] = React.useState([])
 
-
     const gamesWord = [...palavras]
 
     const [sortWord, setSortWord] = react.useState()
 
-    const [botaoChooseWord, setBotaoChooseWord] = React.useState(<div className="choose-word" onClick={EscolherPalavra}>Escolher palavra</div>)
+    const [botaoChooseWord, setBotaoChooseWord] = React.useState(<div data-identifier="choose-word" className="choose-word" onClick={EscolherPalavra}>Escolher palavra</div>)
 
     gamesWord.sort(() => Math.random() - 0.5)
 
@@ -36,14 +32,26 @@ export default function App() {
 
     const [contadorImg, setContadorImg] = React.useState(0)
 
-    // const[trocarClass, setTrocarClass] = React.useState('none')
+    const [classePalavra, setClassePalavra] = React.useState('normal')
 
+    const contador = [0]
+
+    const [palavraChute, setPalavraChute] = react.useState('')
+
+    const [trocarInput, setTrocarInput] = React.useState(false)
+
+    const arraySemNome = [...hiddenWord]
+
+    let palavraEscondida;
+
+    const [tralala, setTralala] = React.useState(true)
+
+    const [desabilitarInput, setDesabilitarInput] = React.useState('disabled')
 
     function EscolherPalavra() {
 
-        setBotaoChooseWord(<div className="choose-word gray">Escolher palavra</div>)
+        setBotaoChooseWord(<div data-identifier="choose-word" className="choose-word gray">Escolher palavra</div>)
         setSortWord(gamesWord[0])
-
 
         const letrass = []
         for (let i = 0; i < gamesWord[0].length; i++) {
@@ -52,15 +60,14 @@ export default function App() {
         setHiddenWord(letrass)
 
         setTralala(false)
+
+        setDesabilitarInput('')
+
+        setTrocarInput(true)
     }
-
-
-
-    const contador = [0]
 
     function verificarLetra(char, ind) {
         setClicados([...clicados, ind])
-
 
         const str = sortWord
         const semAcento = str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
@@ -70,49 +77,48 @@ export default function App() {
 
         let novoContador = 0
 
-
-        if (contador[0] == 0) {
-            alert('você errou a letra')
+        if (contador[0] === 0) {
             setContadorImg(contadorImg + 1)
             novoContador = contadorImg + 1
         }
         contador[0] = 0
 
-        if (novoContador == 6) {
-            prompt('Game-Over. Deseja continuar? [s] [n]')
+        if (novoContador === 6) {
+            ErrouPalavra()
         }
 
+        if (palavraEscondida === sortWord) {
+            AcertouPalavra()
+        }
+
+
     }
-
-
-    const arraySemNome = [...hiddenWord]
-
 
     function verificarCaractere(c, i, l) {
         if (l === c) {
             arraySemNome[i] = sortWord[i]
             setHiddenWord(arraySemNome)
             contador[0] = 3
+
+            palavraEscondida = arraySemNome.toString().replace(/,/g, "")
+            // console.log(palavraEscondida)
         }
+
     }
-
-
-    const [tralala, setTralala] = React.useState(true)
-
 
     function KeyboardON() {
         return (
             <div className="keyboard">
                 {alfabeto.map((l, i) => {
-                    if (tralala == true) {
+                    if (tralala === true) {
                         return (
-                            <div className="testekey clicada">{l}</div>
+                            <div data-identifier="letter" className="testekey clicada">{l}</div>
                         )
                     } else {
                         if (clicados.includes(i)) {
-                            return (<div className="testekey clicada" onClick={() => alert("essa letra já foi clicada")}>{l}</div>)
+                            return (<div data-identifier="letter" className="testekey clicada" onClick={() => alert("essa letra já foi clicada")}>{l}</div>)
                         } else {
-                            return (<div className="testekey" onClick={() => { verificarLetra(l, i) }}>{l}</div>)
+                            return (<div data-identifier="letter" className="testekey" onClick={() => { verificarLetra(l, i) }}>{l}</div>)
                         }
                     }
                 })}
@@ -120,30 +126,73 @@ export default function App() {
         )
     }
 
-
-
-
-
-    function chutarPalavra(){
-        // alert(sortWord)
-        // alert(hiddenWord.length)
-        alert(hiddenWord)
-        let string = hiddenWord.toString().replace(/,/g, "")
-        if(sortWord == string){
-            alert(string.length)
+    function chutarPalavra() {
+        const stringVazia = ''
+        if (palavraChute.toLocaleLowerCase() === sortWord.normalize('NFD').replace(/[\u0300-\u036f]/g, "")) {
+            AcertouPalavra()
+        } else if (palavraChute !== stringVazia){
+            ErrouPalavra()
         }
 
-
-        
     }
+
+    function AcertouPalavra() {
+        alert('Parabéns, Você acertou a palavra!')
+        setClassePalavra('acertou')
+        setHiddenWord(sortWord)
+        setDesabilitarInput('disabled')
+        setTralala(true)
+
+
+        setBotaoChooseWord(<div data-identifier="choose-word" className="choose-word" onClick={ReiniciarJogo}>Reiniciar Jogo</div>)
+    }
+
+    function ErrouPalavra() {
+        alert('Game-Over. Você errou a palavra. :(')
+        setClassePalavra('errou')
+        setHiddenWord(sortWord)
+        setDesabilitarInput('disabled')
+        setTralala(true)
+        setContadorImg(6)
+
+
+        setBotaoChooseWord(<div data-identifier="choose-word" className="choose-word" onClick={ReiniciarJogo}>Reiniciar Jogo</div>)
+    }
+
+    function ReiniciarJogo(){
+
+        setBotaoChooseWord(<div data-identifier="choose-word" className="choose-word gray">Escolher palavra</div>)
+        setSortWord(gamesWord[0])
+
+        const letrass = []
+        for (let i = 0; i < gamesWord[0].length; i++) {
+            letrass.push(" _ ")
+        }
+        setHiddenWord(letrass)
+
+        setTralala(false)
+
+        setDesabilitarInput('')
+
+        setTrocarInput(true)
+
+        setClicados([])
+
+        setTrocarInput(true)
+
+        setContadorImg(0)
+
+        setClassePalavra('normal')
+    }
+
 
     return (
         <>
             <div className="top-part">
-                <img src={listaImagens[contadorImg]} alt="" onClick={() => setTralala(false)} />
+                <img data-identifier="game-image" src={listaImagens[contadorImg]} alt="" />
                 <div className="right-side">
                     {botaoChooseWord}
-                    <div className="palavraAleatória">{hiddenWord}</div>
+                    <div className="palavraAleatória"><span data-identifier="word" className={classePalavra}>{hiddenWord}</span></div>
                 </div>
             </div>
 
@@ -152,11 +201,13 @@ export default function App() {
                 <KeyboardON />
                 <div className="kick">
                     {/* "Já sei, a palavra é:" */}
-                    <input placeholder={sortWord}></input>
-                    <div className="kick-word" onClick={
-                        // () => (alert('oi'))
-                        chutarPalavra
-                        }>Chutar</div>
+                    <input data-identifier="type-guess" placeholder="Já sei, a palavra é:" disabled={desabilitarInput} onChange={(e) => setPalavraChute(e.target.value)}></input>
+                    <div data-identifier="guess-button" className="kick-word" onClick={() => {
+                        if (trocarInput) {
+                            chutarPalavra()
+                        }
+                    }
+                    }>Chutar</div>
                 </div>
             </div>
         </>
