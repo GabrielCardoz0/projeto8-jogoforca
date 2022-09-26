@@ -21,7 +21,6 @@ export default function App() {
 
     const [clicados, setClicados] = React.useState([])
 
-    const [imagemForca, setImagemForca] = React.useState(image0)
 
     const gamesWord = [...palavras]
 
@@ -31,17 +30,19 @@ export default function App() {
 
     gamesWord.sort(() => Math.random() - 0.5)
 
-    const [arr, setArr] = React.useState([])
-
     const [hiddenWord, setHiddenWord] = react.useState([])
 
+    const listaImagens = [image0, image1, image2, image3, image4, image5, image6]
+
+    const [contadorImg, setContadorImg] = React.useState(0)
+
+    // const[trocarClass, setTrocarClass] = React.useState('none')
 
 
     function EscolherPalavra() {
 
         setBotaoChooseWord(<div className="choose-word gray">Escolher palavra</div>)
         setSortWord(gamesWord[0])
-        setArr(gamesWord[0].split(''))
 
 
         const letrass = []
@@ -55,41 +56,45 @@ export default function App() {
 
 
 
-
-
+    const contador = [0]
 
     function verificarLetra(char, ind) {
         setClicados([...clicados, ind])
+
 
         const str = sortWord
         const semAcento = str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
         const array = semAcento.toUpperCase().split('')
 
         array.map((caracterSemAcento, indiceSemAcento) => verificarCaractere(caracterSemAcento, indiceSemAcento, char))
+
+        let novoContador = 0
+
+
+        if (contador[0] == 0) {
+            alert('você errou a letra')
+            setContadorImg(contadorImg + 1)
+            novoContador = contadorImg + 1
+        }
+        contador[0] = 0
+
+        if (novoContador == 6) {
+            prompt('Game-Over. Deseja continuar? [s] [n]')
+        }
+
     }
 
 
     const arraySemNome = [...hiddenWord]
 
 
-
-
     function verificarCaractere(c, i, l) {
-        let contador = 0
         if (l === c) {
             arraySemNome[i] = sortWord[i]
             setHiddenWord(arraySemNome)
-            contador = 1
-        } 
-        if (contador = 0){
-            alert('letra errada')
+            contador[0] = 3
         }
     }
-
-
-
-
-
 
 
     const [tralala, setTralala] = React.useState(true)
@@ -117,34 +122,42 @@ export default function App() {
 
 
 
+
+
+    function chutarPalavra(){
+        // alert(sortWord)
+        // alert(hiddenWord.length)
+        alert(hiddenWord)
+        let string = hiddenWord.toString().replace(/,/g, "")
+        if(sortWord == string){
+            alert(string.length)
+        }
+
+
+        
+    }
+
     return (
         <>
             <div className="top-part">
-                <img src={imagemForca} alt="" onClick={() => setTralala(false)} />
-
-
+                <img src={listaImagens[contadorImg]} alt="" onClick={() => setTralala(false)} />
                 <div className="right-side">
-
                     {botaoChooseWord}
-
-                    <div className="palavraAleatória">{
-                        // arr.map((c) => ("_ "))
-                        hiddenWord
-                    }</div>
-
+                    <div className="palavraAleatória">{hiddenWord}</div>
                 </div>
             </div>
 
 
             <div className="bottom-part">
                 <KeyboardON />
-
                 <div className="kick">
                     {/* "Já sei, a palavra é:" */}
                     <input placeholder={sortWord}></input>
-                    <div className="kick-word" onClick={() => (alert('oi'))}>Chutar</div>
+                    <div className="kick-word" onClick={
+                        // () => (alert('oi'))
+                        chutarPalavra
+                        }>Chutar</div>
                 </div>
-
             </div>
         </>
     )
