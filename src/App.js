@@ -13,7 +13,6 @@ import palavras from "./palavras";
 
 export default function App() {
 
-
     const alfabeto = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 
     const [clicados, setClicados] = React.useState([])
@@ -200,7 +199,6 @@ export default function App() {
             <div className="bottom-part">
                 <KeyboardON />
                 <div className="kick">
-                    {/* "Já sei, a palavra é:" */}
                     <input data-identifier="type-guess" placeholder="Já sei, a palavra é:" disabled={desabilitarInput} onChange={(e) => setPalavraChute(e.target.value)}></input>
                     <div data-identifier="guess-button" className="kick-word" onClick={() => {
                         if (trocarInput) {
